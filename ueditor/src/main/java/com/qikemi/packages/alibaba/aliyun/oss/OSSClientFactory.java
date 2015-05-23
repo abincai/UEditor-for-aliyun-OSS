@@ -1,9 +1,9 @@
 package com.qikemi.packages.alibaba.aliyun.oss;
 
-import org.apache.log4j.Logger;
-
-import com.aliyun.openservices.oss.OSSClient;
+import com.aliyun.oss.OSSClient;
 import com.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
+
+import org.apache.log4j.Logger;
 
 /**
  * OSSClient是OSS服务的Java客户端，它为调用者提供了一系列的方法，用于和OSS服务进行交互<br>
@@ -14,17 +14,19 @@ import com.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
  */
 public class OSSClientFactory {
 
-	private static Logger logger = Logger.getLogger(OSSClientFactory.class);
-	
-	/**
-	 * 新建OSSClient 
-	 * 
-	 * @return
-	 */
-	public static OSSClient createOSSClient(){
-		OSSClient client = new OSSClient(OSSClientProperties.key, OSSClientProperties.secret);
-		logger.info("createOSSClient success.");
-		return client;
-	}
-	
+  private static Logger logger = Logger.getLogger(OSSClientFactory.class);
+
+  /**
+   * 新建OSSClient
+   * 
+   * @return
+   */
+  public static OSSClient createOSSClient() {
+    OSSClient client =
+        new OSSClient(OSSClientProperties.endPoint, OSSClientProperties.key,
+            OSSClientProperties.secret);
+    logger.info("createOSSClient success.");
+    return client;
+  }
+
 }

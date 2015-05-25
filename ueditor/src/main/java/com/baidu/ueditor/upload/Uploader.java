@@ -1,10 +1,8 @@
 package com.baidu.ueditor.upload;
 
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.model.Bucket;
 import com.aliyun.oss.model.PutObjectResult;
 import com.baidu.ueditor.define.State;
-import com.qikemi.packages.alibaba.aliyun.oss.BucketService;
 import com.qikemi.packages.alibaba.aliyun.oss.OSSClientFactory;
 import com.qikemi.packages.alibaba.aliyun.oss.ObjectService;
 import com.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
@@ -14,7 +12,6 @@ import org.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
@@ -49,14 +46,15 @@ public class Uploader {
         // uploadThreader.start();
         OSSClient client = OSSClientFactory.createOSSClient();
 
-        Bucket bucket = BucketService.create(client, OSSClientProperties.bucketName);
+        // Bucket bucket = BucketService.create(client, OSSClientProperties.bucketName);
         // 获取key，即文件的上传路径
         String key = stateJson.getString("url").replaceFirst("/", "");
         try {
-          FileInputStream fileInputStream =
-              new FileInputStream(stateJson.getString("physicalPath"));
+          // FileInputStream fileInputStream =
+          // new FileInputStream(stateJson.getString("physicalPath"));
           PutObjectResult result =
-              ObjectService.putObject(client, bucket.getName(), key, fileInputStream);
+              ObjectService.putObject(client, OSSClientProperties.bucketName, key,
+                  stateJson.getString("physicalPath"));
           logger.debug("upload image[" + stateJson.getString("url") + "] to aliyun OSS success.");
         } catch (FileNotFoundException e) {
           logger.error("upload to aliyun OSS error, FileNotFoundException。");
@@ -66,7 +64,7 @@ public class Uploader {
           logger.error("upload to aliyun OSS error, IOException。");
         }
 
-        state.putInfo("url", OSSClientProperties.endPoint + stateJson.getString("url"));
+        state.putInfo("url", OSSClientProperties.host + stateJson.getString("url"));
       } else {
         state.putInfo("url", "/" + SystemUtil.getProjectName() + stateJson.getString("url"));
       }
